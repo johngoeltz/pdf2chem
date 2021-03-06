@@ -43,6 +43,36 @@ if regex_number == 3:
 """# Define functions"""
 
 def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
+    """
+    Extracts known chemicals from a pdf file and output them as a csv file with
+    machine readable SMILES format.
+
+    Parameters
+    ----------
+    pdf_path : path
+      Path to pdf files of interest.  Currently set to current working directory.
+    pdf_method : str
+      Method used by textract.  It is automatically set by checking whether you're in a local
+      runtime or a hosted runtime in Colab.
+    false_positives : list
+      Now a hard-coded list of known false positives.  May be downloadable in the future.
+    regex_number : int
+      If the number is 3, a more exhaustive search is performed, resulting in more false positives.
+      If the number is 4, three-letter abbreviations are not searched.
+
+    Returns
+    -------
+    .csv files
+      A csv file of chemicals found and SMILES strings for each.
+      A csv file of "missed chemicals", ones that weren't queried.
+
+    Examples
+    --------
+    >>> import pdf2chem
+    >>> quick_curate()
+    >>> aggregate_csv_files()
+    output csv files
+    """
 
   # extract the text from the pdf
   # the pdf_method should adapt to both local and hosted runtime compatibility
