@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pdf2chem"
+version = "0.1.0"
+description = "A curator for chemistry-related pdf files"
+authors = ["johngoeltz <80011540+johngoeltz@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
