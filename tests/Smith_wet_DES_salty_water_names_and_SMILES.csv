@@ -1,0 +1,11 @@
+,Name,SMILES
+2,urea,NC(N)=O
+3,h2o,O
+4,choline chloride,[Cl-].C[N+](C)(C)CCO
+12,des,CC\C(c1ccc(O)cc1)=C(\CC)c2ccc(O)cc2
+13,acetone,CC(C)=O
+18,hydrogen,[H]
+23,amide,[NH2-]
+31,ethylene glycol,OCCO
+73,hydroxyl,[OH-]
+130,dry ice,O=C=O
