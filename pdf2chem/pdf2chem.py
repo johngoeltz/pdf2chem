@@ -44,9 +44,6 @@ if regex_number == 3:
 
 """# Define functions"""
 
-def print_4():
-  print('4')
-
 def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
 #def quick_curate():
 
@@ -198,7 +195,7 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
 
   # return chem_df
 
-def aggregate_csv_files():
+def aggregate_csv_files(pdf_dir = os.getcwd()):
   # combines all results files into a single csv file
   all_chemicals = pd.concat([pd.read_csv(filename) for filename in os.listdir(pdf_dir) if re.search('csv$', filename)])
   all_chemicals.to_csv(datetime.today().strftime('%Y%m%d')+"combined_csv.csv", index=False, encoding='utf-8-sig')
@@ -206,10 +203,7 @@ def aggregate_csv_files():
 """# Curate pdfs"""
 
 #@title ## Curator output will appear below
-def curate_folder():
-  pdf_dir = os.getcwd()
-
-  pd.DataFrame(data=None, columns=('Name', 'SMILES'))
+def curate_folder(pdf_dir = os.getcwd()):
 
   assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
 
