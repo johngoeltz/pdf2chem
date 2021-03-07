@@ -4,7 +4,7 @@ curation_type = "Exhaustive (includes 3-letter words)"
 
 # pip install chemdataextractor
 import chemdataextractor as cde
-!cde data download
+#!cde data download
 
 # pip install cirpy
 import cirpy
@@ -22,6 +22,8 @@ if curation_type == "Regular (ignores 3-letter words)":
   regex_number = 4
 else:
   regex_number = 3
+
+pdf_path = os.getcwd()
 
 import sys
 IN_COLAB = "google.colab" in sys.modules
@@ -42,37 +44,15 @@ if regex_number == 3:
 
 """# Define functions"""
 
+def print_4():
+  print('4')
+
 def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
-    """
-    Extracts known chemicals from a pdf file and output them as a csv file with
-    machine readable SMILES format.
+#def quick_curate():
 
-    Parameters
-    ----------
-    pdf_path : path
-      Path to pdf files of interest.  Currently set to current working directory.
-    pdf_method : str
-      Method used by textract.  It is automatically set by checking whether you're in a local
-      runtime or a hosted runtime in Colab.
-    false_positives : list
-      Now a hard-coded list of known false positives.  May be downloadable in the future.
-    regex_number : int
-      If the number is 3, a more exhaustive search is performed, resulting in more false positives.
-      If the number is 4, three-letter abbreviations are not searched.
-
-    Returns
-    -------
-    .csv files
-      A csv file of chemicals found and SMILES strings for each.
-      A csv file of "missed chemicals", ones that weren't queried.
-
-    Examples
-    --------
-    >>> import pdf2chem
-    >>> quick_curate()
-    >>> aggregate_csv_files()
-    output csv files
-    """
+  """
+  docstring coming soon
+  """
 
   # extract the text from the pdf
   # the pdf_method should adapt to both local and hosted runtime compatibility
@@ -226,25 +206,24 @@ def aggregate_csv_files():
 """# Curate pdfs"""
 
 #@title ## Curator output will appear below
+def curate_folder():
+  pdf_dir = os.getcwd()
 
-#pdf_dir = '/content'
-pdf_dir = os.getcwd()
+  pd.DataFrame(data=None, columns=('Name', 'SMILES'))
 
-pd.DataFrame(data=None, columns=('Name', 'SMILES'))
+  assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
 
-assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
+  os.chdir(pdf_dir)
 
-os.chdir(pdf_dir)
+  for filename in os.listdir(pdf_dir):
+    if re.search('pdf$', filename):
+      try:
+        chemicals = quick_curate(filename, pdf_method, false_positives, regex_number)
+      except:
+        print('An exception was raised for ' + filename)
+        print('Most likely, an error occurred when trying to extract text from the pdf.')
 
-for filename in os.listdir(pdf_dir):
-  if re.search('pdf$', filename):
-    try:
-      chemicals = quick_curate(filename, pdf_method, false_positives, regex_number)
-    except:
-      print('An exception was raised for ' + filename)
-      print('Most likely, an error occurred when trying to extract text from the pdf.')
-
-try:
-  aggregate_csv_files()
-except:
-  "An error occurred while trying to combine the output csv files."
+  try:
+    aggregate_csv_files()
+  except:
+    "An error occurred while trying to combine the output csv files."
