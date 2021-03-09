@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdf2chem"
-version = "0.1.1"
+version = "0.1.0"
 description = "A curator for chemistry-related pdf files"
 authors = ["johngoeltz <80011540+johngoeltz@users.noreply.github.com>"]
 license = "MIT"
@@ -23,3 +23,9 @@ flake8 = "^3.8.4"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = "pypkgs/__init__.py:__version__"
+version_source = "commit"
+upload_to_pypi = "false"
+patch_without_tag = "true"
