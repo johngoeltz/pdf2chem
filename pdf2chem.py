@@ -45,11 +45,6 @@ if regex_number == 3:
 """# Define functions"""
 
 def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
-#def quick_curate():
-
-  """
-  docstring coming soon
-  """
 
   # extract the text from the pdf
   # the pdf_method should adapt to both local and hosted runtime compatibility
@@ -81,7 +76,7 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
 
   print('The initial list for {} has {} words.'.format(pdf_path, len(temp_word_list)))
 
-  # reconstruct a text string from the cleaned list; cde's NLP works on strings
+  # reconstruct a text string from the cleaned list, as cde's NLP works on strings
   cleaned_text = ''
   for word in temp_word_list:
     cleaned_text += word
@@ -142,6 +137,7 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
       smiles_list.append(None)
       print('We\'ve already queried this one: {}'.format(item))
 
+
     # don't query the chemical if it's a known false positive
     # these include author names and a few other odds and ends
     elif item.strip('.').strip(',').lower() in false_positives:
@@ -195,7 +191,7 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
 
   # return chem_df
 
-def aggregate_csv_files(pdf_dir = os.getcwd()):
+def aggregate_csv_files():
   # combines all results files into a single csv file
   all_chemicals = pd.concat([pd.read_csv(filename) for filename in os.listdir(pdf_dir) if re.search('csv$', filename)])
   all_chemicals.to_csv(datetime.today().strftime('%Y%m%d')+"combined_csv.csv", index=False, encoding='utf-8-sig')
@@ -204,6 +200,8 @@ def aggregate_csv_files(pdf_dir = os.getcwd()):
 
 #@title ## Curator output will appear below
 def curate_folder(pdf_dir = os.getcwd()):
+
+  pd.DataFrame(data=None, columns=('Name', 'SMILES'))
 
   assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
 
