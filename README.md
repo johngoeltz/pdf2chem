@@ -13,6 +13,7 @@ $ cde data download
 
 ```Jupyter_or_Colab
 in Jupyter or Colab
+
 !pip install pdf2chem
 !cde data download
 import pdf2chem as p2c
@@ -21,11 +22,13 @@ import pdf2chem as p2c
 
 ## Features
 
-- TODO
+- This version allows the user to curate a folder of chemistry-related pdf files, extracting known chemicals mentioned in the files to csv files with the names as written in the pdf and the SMILES string for each chemical.  Other outputs (e.g., InChI or other known names for the chemical) are possible and may be incorporated into future versions.
+
+- The package should automatically detect local vs. hosted runtimes and choose the compatible pdf extraction method in textract.
 
 ## Dependencies
 
-- TODO
+- The package directly uses cirpy, ChemDataExtractor, pandas, os, re, time, datetime, and sys in addition to native Python 3.  Many of these in turn have a fair few dependencies of their own.
 
 ## Usage
 
@@ -36,7 +39,7 @@ p2c.curate_folder('C:/Users/kfrog/literature')
 The files will then be analyzed internally before a list of words and phrases suspected to be known chemicals is sent to NIH's servers to be resolved.  Chemicals found and their SMILES strings will be aggregated in a csv file for each pdf.
 After each pdf is processed, the data from each csv file will be combined to an aggregated csv file for all the papers in that run.
 
-- Please note: this program depends on stable internet access and uptime at NIH's servers.  They are often slower or down entirely on the weekends, and sometimes this is seen during the week as well.  We appreciate the team there making the databases as accessible as they do.
+- Please note: this program depends on both stable internet access and uptime/responsiveness at NIH's servers.  The latter are often slower or down entirely on the weekends, and sometimes this is seen during the week as well.  We appreciate the team there making the databases as accessible as they do.
 
 ## Documentation
 
