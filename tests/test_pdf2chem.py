@@ -5,7 +5,7 @@ import re
 from datetime import datetime
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == '0.1.2'
 
 def test_curate_folder():
     # Currently tests function by asserting whether files were output by the function with today's date in the filename

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdf2chem"
-version = "0.1.0"
+version = "0.1.2"
 description = "A curator for chemistry-related pdf files"
 authors = ["johngoeltz <80011540+johngoeltz@users.noreply.github.com>"]
 license = "MIT"
