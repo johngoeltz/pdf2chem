@@ -211,9 +211,9 @@ def curate_folder(pdf_dir = os.getcwd()):
     if re.search('pdf$', filename):
       try:
         chemicals = quick_curate(filename, pdf_method, false_positives, regex_number)
-      except:
+    except Exception as e:
         print('An exception was raised for ' + filename)
-        print('Most likely, an error occurred when trying to extract text from the pdf.')
+        print(e)
 
   try:
     aggregate_csv_files()
