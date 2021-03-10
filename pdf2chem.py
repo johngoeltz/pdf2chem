@@ -211,7 +211,7 @@ def curate_folder(pdf_dir = os.getcwd()):
     if re.search('pdf$', filename):
       try:
         chemicals = quick_curate(filename, pdf_method, false_positives, regex_number)
-    except Exception as e:
+      except Exception as e:
         print('An exception was raised for ' + filename)
         print(e)
 
