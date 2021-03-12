@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "pdf2chem"
-version = "0.1.4"
+version = "0.1.5"
 description = "A curator for chemistry-related pdf files"
 authors = ["johngoeltz <80011540+johngoeltz@users.noreply.github.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/johngoeltz/pdf2chem"
+keywords = ["chemistry", "curator", "pdf", "SMILES"]
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
