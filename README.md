@@ -32,11 +32,14 @@ import pdf2chem as p2c
 
 ## Usage
 
+- Use use self-contained Colab page at https://drive.google.com/file/d/1YYZm-Ew-408q86DjDbQTCUoWUNVl_UN3/view?usp=sharing
+- or
+- Install and import as described above
 - Place pdf files of interest (typically journal articles) in an accessible folder.
-Execute p2c.curate_folder()
-If the files are not in the current directory, pass the directory to the function as an argument, e.g.
+- Execute p2c.curate_folder()
+- If the files are not in the current directory, pass the directory to the function as an argument, e.g.
 p2c.curate_folder('C:/Users/kfrog/literature')
-The files will then be analyzed internally before a list of words and phrases suspected to be known chemicals is sent to NIH's servers to be resolved.  Chemicals found and their SMILES strings will be aggregated in a csv file for each pdf.
+- The files will then be analyzed internally before a list of words and phrases suspected to be known chemicals is sent to NIH's servers to be resolved.  Chemicals found and their SMILES strings will be aggregated in a csv file for each pdf.
 After each pdf is processed, the data from each csv file will be combined to an aggregated csv file for all the papers in that run.
 
 - Please note: this program depends on both stable internet access and uptime/responsiveness at NIH's servers.  The latter are often slower or down entirely on the weekends, and sometimes this is seen during the week as well.  We appreciate the team there making the databases as accessible as they do.
