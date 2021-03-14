@@ -33,7 +33,7 @@ import pdf2chem as p2c
 ## Usage
 
 - Use use self-contained Colab page at https://drive.google.com/file/d/1YYZm-Ew-408q86DjDbQTCUoWUNVl_UN3/view?usp=sharing
-- or
+or
 - Install and import as described above
 - Place pdf files of interest (typically journal articles) in an accessible folder.
 - Execute p2c.curate_folder()
