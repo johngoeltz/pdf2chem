@@ -256,7 +256,26 @@ def aggregate_csv_files():
 
 #@title ## Curator output will appear below
 def curate_folder(pdf_dir = os.getcwd()):
+    """
+    Extract known chemicals from a folder of pdf files, and export a
+    .csv file of SMILESstrings, a machine-readable chemical format
+    for each file and a combined .csv for all the pdf files.
 
+    Extended Summary
+    ----------------
+    Extract text from a pdf file.  Use chemdataextractor's NLP to identify
+    chemical entities. Attempt to resolve each entity at NIH's CACTVS service.
+    Organize chemicals recognized by PubChem into a dataframe.
+    Export the chemical names and SMILES strings as a .csv files
+    Repeat for each pdf file in the folder
+
+    Parameters
+    ----------
+    pdf_dir : string, optional
+        path to a folder of pdf files (the default is the current working
+        directory)
+    """
+    
     pd.DataFrame(data=None, columns=('Name', 'SMILES'))
 
     assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
