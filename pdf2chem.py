@@ -101,53 +101,66 @@ if regex_number == 3:
 def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
 
     # extract the text from the pdf
-    # the pdf_method should adapt to both local and hosted runtime compatibility
+    # the pdf_method should adapt to both local and hosted
+    # runtime compatibility
     text = textract.process(pdf_path, method=pdf_method)
 
     # queue up and reset list used to process the paper
     temp_word_list = []
 
     # strip new line and other markup from pdf mining
-    text = str(text).replace("\\n-", '').replace('\-\n', '').replace('\-\n-', '').replace('\\n', ' ').replace('\n', ' ').replace('.', '')
-    text = str(text).replace('*', "").replace('ISSN', '').replace('NSF', '').replace('NIH', '').replace("b'", '').replace(r"\r", '')
+    text = str(text).replace("\\n-", '').replace('\-\n', '')
+    text = str(text).replace('\-\n-', '').replace('\\n', ' ')
+    text = str(text).replace('\n', ' ').replace('.', '')
+    text = str(text).replace('*', "").replace('ISSN', '').replace('NSF', '')
+    text = str(text).replace('NIH', '').replace("b'", '').replace(r"\r", '')
 
     # split by white spaces
     temp_word_list = re.split("\s+", str(text))
 
-    # try to remove reference section by cutting off everything after the last mention of reference
-    ref = [i for i, w in enumerate(temp_word_list) if w.lower().startswith('reference')]
+    # try to remove reference section by cutting off everything after the last
+    # mention of reference
+    ref = [i for i, w in enumerate(temp_word_list) if
+           w.lower().startswith('reference')]
     #print(ref)
     try:
         temp_word_list = temp_word_list[:(ref[-1])]
     except Exception as e:
         pass
 
-    # reconnect any words that got hyphenated and cut off at the end of a column
+    # reconnect any words that got hyphenated and cut off at the end
+    # of a column
     for i, word in enumerate(temp_word_list):
         if re.search('[-]+$', word):
             temp_word_list[i] = word.replace('-', '') + temp_word_list[i+1]
             del(temp_word_list[i+1])
 
-    print('The initial list for {} has {} words.'.format(pdf_path, len(temp_word_list)))
+    print('The initial list for {} has {} words.'.format(pdf_path,
+                                                         len(temp_word_list)))
 
-    # reconstruct a text string from the cleaned list, as cde's NLP works on strings
+    # reconstruct a text string from the cleaned list,
+    # as cde's NLP works on strings
     cleaned_text = ''
     for word in temp_word_list:
         cleaned_text += word
         cleaned_text += ' '
 
-    # have cde do NLP on the string and convert the results into a list of strings
+    # have cde do NLP on the string and convert the results
+    # into a list of strings
     doc = cde.Document(cleaned_text)
     chemicals_all = [span for span in doc.cems]
-    chem_strings = [str(word).lower().replace('\n', ' ') for word in chemicals_all]
+    chem_strings = [str(word).lower().replace('\n', ' ')
+                    for word in chemicals_all]
 
     # remove any blanks or null values
     chem_strings = [word for word in chem_strings if word]
 
     # remove anything left with a backslash in it
-    chem_strings = [word for word in chem_strings if not re.search('[\\\+]', word)]
+    chem_strings = [word for word in chem_strings if not
+                    re.search('[\\\+]', word)]
 
-    print('We\'ll attempt to resolve {} potential chemicals.'.format(len(chem_strings)))
+    print('We\'ll attempt to resolve {} \
+          potential chemicals.'.format(len(chem_strings)))
 
     # reset lists used for processing query hits and misses
     smiles_list = []
@@ -169,20 +182,25 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
             print(item, smiles_list[-1])
             continue
 
-        # adapt the regex code that leaves out short words/abbreviations to the user input above
-        if regex_number == 4:
-
-            if not re.search("[a-zA-Z0-9+-]{4}", item):
-                smiles_list.append(None)
-                print('Found a word that\'s a likely false positive: {}'.format(item))
-                missed_items.append(item)
-                continue
+        # Future work - include options for user to specify exclusion of
+        # 3-letter words
+        # adapt the regex code that leaves out short words/abbreviations
+        # to the user input above
+        # if regex_number == 4:
+        #
+        #     if not re.search("[a-zA-Z0-9+-]{4}", item):
+        #         smiles_list.append(None)
+        #         print('Found a word that\'s a\
+        #               likely false positive: {}'.format(item))
+        #         missed_items.append(item)
+        #         continue
 
         if regex_number == 3:
 
             if not re.search("[a-zA-Z0-9+-]{3}", item):
                 smiles_list.append(None)
-                print('Found a word that\'s a likely false positive: {}'.format(item))
+                print('Found a word that\'s a likely false \
+                      positive: {}'.format(item))
                 missed_items.append(item)
                 continue
 
@@ -198,59 +216,73 @@ def quick_curate(pdf_path, pdf_method, false_positives, regex_number):
             smiles_list.append(None)
             print('Found one known to be a false positive: {}'.format(item))
 
-        # if the item passes all the tests, attempt to resolve it via NIH's CIR
+        # if the item passes all the tests,
+        # attempt to resolve it via NIH's CIR
         else:
             try:
                 smiles_list.append(cirpy.resolve(item, 'smiles'))
                 print(item, smiles_list[-1])
                 time.sleep(0.21)
 
-                # except loop in here to account for internet stability issues and the like
+                # except loop in here to account for
+                # internet stability issues and the like
             except Exception as e:
                 try:
                     print(e)
-                    print('Exception raised.  Pausing for 2 seconds and trying again')
+                    print('Exception raised.  Pausing for \
+                          2 seconds and trying again')
                     time.sleep(2)
                     smiles_list.append(cirpy.resolve(item, 'smiles'))
                     print(smiles_list[-1])
                 except Exception as e:
                     try:
                         print(e)
-                        print('Exception raised.  Pausing for another 2 seconds and trying again')
+                        print('Exception raised.  Pausing for another \
+                              2 seconds and trying again')
                         time.sleep(2)
                         smiles_list.append(cirpy.resolve(item, 'smiles'))
                         print(smiles_list[-1])
                     except Exception as e:
                         try:
                             print(e)
-                            print('Exception raised.  Pausing for one more stretch and trying again')
+                            print('Exception raised.  Pausing for one more \
+                                  stretch and trying again')
                             time.sleep(2)
                             smiles_list.append(cirpy.resolve(item, 'smiles'))
                             print(smiles_list[-1])
                         except Exception as e:
                             print(e)
-                            print('It still raised an exception.  Here\'s how far it got:')
+                            print('It still raised an exception.  Here\'s \
+                                  how far it got:')
                             print(smiles_list)
                             print(len(smiles_list))
-                            print('This item will be added to a list called missed items.')
+                            print('This item will be added to a list \
+                                  called missed items.')
                             print(item)
                             smiles_list.append('Check')
                             missed_items.append(item)
         already_queried.append(item)
 
     # tidy these up into pandas dataframes and export them as csv files
-    chem_df = pd.DataFrame(zip(chem_strings, smiles_list), columns=('Name', 'SMILES'))
+    chem_df = pd.DataFrame(zip(chem_strings, smiles_list),
+                           columns=('Name', 'SMILES'))
     chem_df = chem_df.dropna()
-    chem_df.to_csv(os.path.splitext(pdf_path)[0]+'_'+datetime.today().strftime('%Y%m%d')+'_names_and_SMILES.csv')
+    chem_df.to_csv(os.path.splitext(pdf_path)[0]+'_'+datetime.today().
+                   strftime('%Y%m%d')+'_names_and_SMILES.csv')
     if missed_items:
         missed_df = pd.DataFrame(missed_items, columns=['Missed'])
         missed_df = missed_df.drop_duplicates()
-        missed_df.to_csv(os.path.splitext(pdf_path)[0]+'_'+datetime.today().strftime('%Y%m%d')+'_zzz_missed_items.csv')
+        missed_df.to_csv(os.path.splitext(pdf_path)[0]+'_'+datetime.
+                         today().strftime('%Y%m%d')+'_zzz_missed_items.csv')
 
 def aggregate_csv_files():
     # combines all results files into a single csv file
-    all_chemicals = pd.concat([pd.read_csv(filename) for filename in os.listdir(pdf_dir) if re.search('csv$', filename)])
-    all_chemicals.to_csv(datetime.today().strftime('%Y%m%d')+"combined_csv.csv", index=False, encoding='utf-8-sig')
+    all_chemicals = pd.concat([pd.read_csv(filename) for filename in
+                               os.listdir(pdf_dir) if
+                               re.search('csv$', filename)])
+    all_chemicals.to_csv(datetime.today().
+                         strftime('%Y%m%d')+"combined_csv.csv",
+                         index=False, encoding='utf-8-sig')
 
 """# Curate pdfs"""
 
@@ -275,17 +307,19 @@ def curate_folder(pdf_dir = os.getcwd()):
         path to a folder of pdf files (the default is the current working
         directory)
     """
-    
+
     pd.DataFrame(data=None, columns=('Name', 'SMILES'))
 
-    assert os.path.exists(pdf_dir), "I did not find the directory at, "+str(pdf_dir)
+    assert os.path.exists(pdf_dir), "I did not find the \
+    directory at, "+str(pdf_dir)
 
     os.chdir(pdf_dir)
 
     for filename in os.listdir(pdf_dir):
         if re.search('pdf$', filename):
             try:
-                chemicals = quick_curate(filename, pdf_method, false_positives, regex_number)
+                chemicals = quick_curate(filename, pdf_method,
+                                         false_positives, regex_number)
             except Exception as e:
                 print('An exception was raised for ' + filename)
                 print(e)
