@@ -1,6 +1,6 @@
 # pdf2chem
 
-![](https://github.com/johngoeltz/pdf2chem/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/johngoeltz/pdf2chem/branch/main/graph/badge.svg)](https://codecov.io/gh/johngoeltz/pdf2chem) ![Release](https://github.com/johngoeltz/pdf2chem/workflows/Release/badge.svg) [![Documentation Status](https://readthedocs.org/projects/pdf2chem/badge/?version=latest)](https://pdf2chem.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/pdf2chem/badge/?version=latest)](https://pdf2chem.readthedocs.io/en/latest/?badge=latest)
 
 A curator for chemistry-related pdf files
 
